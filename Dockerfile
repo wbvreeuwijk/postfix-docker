@@ -7,8 +7,8 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 RUN apk update && apk upgrade
 RUN true && \
-    apk add --update --no-cache tzdata postfix postfix-lmdb bash supervisor dnssec-root rsyslog \
-                                cyrus-sasl cyrus-sasl-plain cyrus-sasl-login cyrus-sasl-digestmd5 cyrus-sasl-crammd5 && \
+    apk add --update --no-cache tzdata postfix bash supervisor dnssec-root rsyslog \
+                                cyrus-sasl cyrus-sasl-login cyrus-sasl-digestmd5 cyrus-sasl-crammd5 && \
     (rm "/tmp/"* 2>/dev/null || true) && (rm -rf /var/cache/apk/* 2>/dev/null || true)
 
 # Build SASL
