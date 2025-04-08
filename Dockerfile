@@ -1,6 +1,6 @@
 #Creating Image for postfix/opendkim service
 #FROM alpine
-FROM alpine:3.12
+FROM alpine
 
 ENV TZ=Europe/Amsterdam
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
