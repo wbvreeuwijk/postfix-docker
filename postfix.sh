@@ -2,8 +2,16 @@
 
 # Restore default system files to /etc/postfix if they are missing (e.g. due to a volume mount)
 if [ -d /etc/postfix.backup ]; then
-    echo "Restoring missing default configuration files to /etc/postfix..."
-    for file in main.cf master.cf dynamicmaps.cf dynamicmaps.cf.d postfix-files postfix-files.d; do
+    echo "Restoring system configuration files to /etc/postfix..."
+    # Always overwrite system-level configurations to match package binaries
+    for file in dynamicmaps.cf dynamicmaps.cf.d postfix-files postfix-files.d; do
+        if [ -e "/etc/postfix.backup/$file" ]; then
+            rm -rf "/etc/postfix/$file"
+            cp -r "/etc/postfix.backup/$file" "/etc/postfix/"
+        fi
+    done
+    # Only restore user configurations if they are completely missing
+    for file in main.cf master.cf; do
         if [ ! -e "/etc/postfix/$file" ] && [ -e "/etc/postfix.backup/$file" ]; then
             cp -r "/etc/postfix.backup/$file" "/etc/postfix/"
         fi
