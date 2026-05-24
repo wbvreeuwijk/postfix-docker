@@ -11,6 +11,7 @@ if [ -f /etc/postfix/main.cf ]; then
     postconf -c /etc/postfix -e "compatibility_level=3.6"
     postconf -c /etc/postfix -e "default_database_type=lmdb"
     postconf -c /etc/postfix -e "default_cache_db_type=lmdb"
+    postconf -c /etc/postfix -e "maillog_file=/dev/stdout"
 
     # Replace hash: and btree: with lmdb: in main.cf and master.cf
     sed -i 's/\bhash:/lmdb:/g' /etc/postfix/main.cf
@@ -18,6 +19,9 @@ if [ -f /etc/postfix/main.cf ]; then
     if [ -f /etc/postfix/master.cf ]; then
         sed -i 's/\bhash:/lmdb:/g' /etc/postfix/master.cf
         sed -i 's/\bbtree:/lmdb:/g' /etc/postfix/master.cf
+        if ! grep -q "^postlog" /etc/postfix/master.cf; then
+            echo "postlog   unix-dgram n  -       n       -       1       postlogd" >> /etc/postfix/master.cf
+        fi
     fi
 
     # Find all lmdb files referenced in main.cf and rebuild them
@@ -65,4 +69,4 @@ for file in $FILES; do
     fi
 done
 
-/usr/sbin/postfix -c /etc/postfix start
+exec /usr/sbin/postfix -c /etc/postfix start-fg

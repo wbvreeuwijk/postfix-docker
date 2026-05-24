@@ -35,6 +35,7 @@ RUN chmod +x /opt/postfix.sh && \
 
 # Postfix configuration in a single RUN
 RUN postconf -e compatibility_level=3.6 && \
+    postconf -e "maillog_file = /dev/stdout" && \
     postconf -e smtputf8_enable=no && \
     postconf -e mydestination= && \
     postconf -e relay_domains= && \
