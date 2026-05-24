@@ -13,7 +13,6 @@ ENV TZ=Europe/Amsterdam \
 # Install packages (including tzdata for timezone setup) and clean up in one layer
 RUN apk add --no-cache \
     postfix \
-    postfix-lmdb \
     bash \
     supervisor \
     dnssec-root \
@@ -46,7 +45,8 @@ RUN postconf -e compatibility_level=3.6 && \
     postconf -e "mynetworks=127.0.0.0/8,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16" && \
     sed -i -r -e 's/^#submission/submission/' \
     -e 's/smtp      inet  n       -       n       -       -       smtpd/125      inet  n       -       n       -       -       smtpd/' \
-    /etc/postfix/master.cf
+    /etc/postfix/master.cf && \
+    cp -a /etc/postfix /etc/postfix.backup
 
 EXPOSE 125
 
