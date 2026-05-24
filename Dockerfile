@@ -34,7 +34,8 @@ RUN chmod +x /opt/postfix.sh && \
     mkdir -p /etc/postfix /var/spool/postfix
 
 # Postfix configuration in a single RUN
-RUN postconf -e smtputf8_enable=no && \
+RUN postconf -e compatibility_level=3.6 && \
+    postconf -e smtputf8_enable=no && \
     postconf -e mydestination= && \
     postconf -e relay_domains= && \
     postconf -e smtpd_delay_reject=yes && \
