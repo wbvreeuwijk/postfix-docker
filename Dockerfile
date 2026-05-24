@@ -13,6 +13,7 @@ ENV TZ=Europe/Amsterdam \
 # Install packages (including tzdata for timezone setup) and clean up in one layer
 RUN apk add --no-cache \
     postfix \
+    postfix-lmdb \
     bash \
     supervisor \
     dnssec-root \
